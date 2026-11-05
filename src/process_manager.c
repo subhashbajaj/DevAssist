@@ -5,5 +5,8 @@ void show_processes(void)
 {
 	printf("\n--- Running Process ---\n");
 	system("ps -eo pid,comm --sort=pid");
+	printf("Total Processes: ");
+	fflush(stdout);
+	system("ps -e --no-headers | wc -l");
 	printf("\n");
 }
