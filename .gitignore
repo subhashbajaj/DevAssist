@@ -1,0 +1,9 @@
+# Compiled executable
+devassist
+
+#Object files
+*.o
+
+# Temporary files
+*~
+
