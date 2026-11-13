@@ -7,7 +7,7 @@ void show_processes(void)
 	int port;
 	do {
 	printf("\n==== Process & Port Manager ====\n");
-	printf("1. Sow Running Processes\n");
+	printf("1. Show Running Processes\n");
 	printf("2. Show Listening Ports\n");
 	printf("3. Check Specific Port Conflict\n");
 	printf("0. Back to Main Menu\n");
@@ -38,7 +38,7 @@ void show_processes(void)
 	  printf("\nEnter port number (1-65535): ");
 
 	  if(scanf("%d", &port) != 1) {
-	   printf("onvalid port number.\n");
+	   printf("Invalid port number.\n");
 	   while (getchar() != '\n');
 	   break;
 	  }
