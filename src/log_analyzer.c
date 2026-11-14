@@ -11,6 +11,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <sys/stat.h>
 #include "log_analyzer.h"
 
 #define LOG_LINE_LEN      1024
@@ -143,6 +144,15 @@ int analyze_log_file(const char *path)
         return -1;
     }
 
+    struct stat st;
+    if (fstat(fileno(fp), &st) == 0 && !S_ISREG(st.st_mode)) {
+        printf("\nCannot analyze '%s': %s.\n", path,
+               S_ISDIR(st.st_mode) ? "it is a directory, not a file"
+                                   : "it is not a regular file");
+        fclose(fp);
+        return -1;
+    }
+
     char line[LOG_LINE_LEN];
     char recent[RECENT][LOG_LINE_LEN];
     long total = 0, nwarn = 0, nerr = 0, ncrit = 0, nproblem = 0;
@@ -180,7 +190,10 @@ int analyze_log_file(const char *path)
     printf("Warnings   : %ld\n", nwarn);
 
     if (nproblem == 0) {
-        printf("\nResult: no errors or warnings found. The log looks healthy.\n");
+        if (total == 0)
+            printf("\nResult: the log file is empty, so there is nothing to analyze.\n");
+        else
+            printf("\nResult: no errors or warnings found. The log looks healthy.\n");
         return 0;
     }
 
